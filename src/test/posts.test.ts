@@ -10,9 +10,21 @@ import {
 } from '../lib/posts'
 
 describe('contenido del blog', () => {
-  it('incluye seis artículos con slug único', () => {
-    expect(posts).toHaveLength(6)
-    expect(new Set(posts.map((post) => post.slug)).size).toBe(6)
+  it('incluye siete artículos con slug único', () => {
+    expect(posts).toHaveLength(7)
+    expect(new Set(posts.map((post) => post.slug)).size).toBe(7)
+  })
+
+  it('incluye el caso real de Agentic Workflows y sus fuentes', () => {
+    const post = posts.find((entry) => entry.slug === 'agentic-workflows-del-evento-al-reporte')
+    expect(post).toBeDefined()
+    expect(post!.animation).toBe('agentic-workflow')
+    const links = post!.blocks.filter((block) => block.type === 'link').map((block) => block.href)
+    expect(links).toContain('https://github.github.com/gh-aw/setup/quick-start/')
+    expect(links).toContain('https://github.com/mageroni/Technical-Blog/blob/main/.github/workflows/pr-build-report.md')
+    for (const guide of ['ai-issue-triage', 'automated-pr-review', 'ai-release-notes', 'docs-automation']) {
+      expect(links).toContain(`https://github.github.com/gh-aw/gallery/${guide}/`)
+    }
   })
 
   it('incluye ejemplos JSON válidos y la fuente oficial de managed settings', () => {

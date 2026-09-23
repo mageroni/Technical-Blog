@@ -30,6 +30,198 @@ export type Post = {
 
 export const posts: Post[] = [
   {
+    slug: 'agentic-workflows-del-evento-al-reporte',
+    title: 'Agentic Workflows: del evento al reporte con IA',
+    summary:
+      'Cómo combinar GitHub Actions con agentes de IA, usando PR Build Report de este repositorio como ejemplo: evidencia, salidas seguras y un único Issue por pull request.',
+    author: 'Equipo Technical Blog',
+    date: '2026-09-23',
+    tags: ['DevOps', 'GitHub Copilot', 'IA'],
+    accent: '#3b82f6',
+    animation: 'agentic-workflow',
+    blocks: [
+      {
+        type: 'paragraph',
+        text: 'Un pipeline sabe ejecutar pruebas; entender sus resultados dispersos y explicarlos a una persona requiere contexto. Ahí encaja un Agentic Workflow: una automatización que combina eventos, herramientas y un agente de IA para alcanzar un objetivo acotado. Este mismo blog contiene un ejemplo: PR Build Report, diseñado para consolidar los resultados de cada pull request en un Issue.',
+      },
+      { type: 'heading', text: '¿Qué aporta un Agentic Workflow?' },
+      {
+        type: 'paragraph',
+        text: 'GitHub Agentic Workflows (gh-aw) permite describir una tarea en Markdown con una cabecera YAML. GitHub Actions sigue aportando los eventos, runners y registros; el agente interpreta las instrucciones y consulta las herramientas autorizadas para decidir qué información necesita y qué resultado proponer. No es simplemente un chat dentro de un job: tiene disparador, contexto, límites y una salida definida.',
+      },
+      {
+        type: 'paragraph',
+        text: 'La diferencia con un workflow tradicional no consiste en sustituir todos los scripts por lenguaje natural. Compilar, ejecutar tests y comprobar reglas exactas sigue siendo trabajo determinista. El agente resulta útil para sintetizar evidencia heterogénea, explicar errores o proponer próximos pasos. Si una tarea se resuelve con una regla sencilla y estable, un script suele ser más predecible y económico.',
+      },
+      { type: 'heading', text: 'Markdown como fuente, Actions como ejecución' },
+      {
+        type: 'list',
+        items: [
+          'Cabecera YAML: declara cuándo se activa, qué permisos y herramientas necesita y cuáles son sus salidas permitidas.',
+          'Cuerpo Markdown: expresa el objetivo, las evidencias que debe consultar, los criterios de decisión y cuándo debe abstenerse.',
+          'Archivo .lock.yml: gh-aw compila la configuración en un workflow ejecutable por GitHub Actions. Se versiona junto con el Markdown; no se edita a mano.',
+          'Motor de IA: Copilot es el predeterminado. La documentación también contempla otros motores; su autenticación se configura por separado.',
+        ],
+      },
+      { type: 'heading', text: 'Primeros pasos según el quick start' },
+      {
+        type: 'paragraph',
+        text: 'Necesitas acceso de escritura a un repositorio, GitHub Actions habilitado y GitHub CLI 2.0.0 o superior en Linux, macOS o Windows con WSL. Comprueba la autenticación de gh antes de instalar su extensión gh-aw. Estos comandos son una guía para tu entorno, no pasos ejecutados por este artículo.',
+      },
+      {
+        type: 'code',
+        language: 'bash',
+        code: `gh --version
+gh auth status
+gh extension install github/gh-aw
+
+# Desde la raíz del repositorio
+gh aw add-wizard githubnext/agentics/repo-status`,
+      },
+      {
+        type: 'paragraph',
+        text: 'El asistente del ejemplo repo-status comprueba permisos, permite elegir motor y configurar su autenticación, añade el Markdown y el lock, y ofrece iniciar una ejecución. Estar autenticado en gh no equivale a tener configuradas las credenciales del motor. Para Copilot, la guía distingue la facturación organizativa compatible mediante copilot-requests: write y el secreto COPILOT_GITHUB_TOKEN. Guarda las credenciales en los secretos de Actions, nunca en el workflow ni en sus reportes.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Versiona y publica ambos archivos, revisa la ejecución en Actions y comprueba el resultado antes de ampliar sus permisos. Cuando cambies la cabecera YAML, recompila con gh aw compile. gh aw status permite consultar el estado y gh aw run repo-status iniciar el ejemplo manualmente una vez publicado. Empieza con un reporte de alcance reducido, no con cambios autónomos en producción.',
+      },
+      { type: 'heading', text: 'El caso real del blog: PR Build Report' },
+      {
+        type: 'paragraph',
+        text: 'La definición está en .github/workflows/pr-build-report.md y su versión compilada en pr-build-report.lock.yml. El repositorio también contiene ci.yml, cuyo job «Lint, tests y build» ejecuta npm ci, npm run lint, npm test y npm run build. El agente no realiza esas comprobaciones: observa los workflows activados por pull_request y explica sus resultados. Aquí describimos su configuración, no afirmamos que una ejecución concreta haya terminado correctamente.',
+      },
+      {
+        type: 'paragraph',
+        text: 'El disparador es workflow_run con types: [completed] y workflows: ["*"]. Un filtro exige que la ejecución observada provenga de pull_request y excluye al propio PR Build Report para evitar recursión. Una apertura de PR no basta por sí sola: debe terminar un workflow observado. Además, la definición del reporte debe estar en la rama predeterminada para recibir este evento.',
+      },
+      {
+        type: 'code',
+        language: 'yaml',
+        code: `# Extracto del disparador; no es un workflow completo
+on:
+  workflow_run:
+    workflows: ["*"]
+    types: [completed]
+    branches: ["**"]
+  roles: all
+if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.name != 'PR Build Report'`,
+      },
+      {
+        type: 'list',
+        items: [
+          'Identificar: resuelve el PR del evento y comprueba repositorio, rama y SHA. Si no hay exactamente un PR abierto verificable o el evento es de una revisión anterior, responde con noop.',
+          'Consolidar: consulta todos los workflows del commit vigente, no solo el que lo despertó. Conserva la ejecución más reciente de cada workflow y sus intentos efectivos, incluidos los éxitos de jobs no repetidos en un reintento parcial.',
+          'Decidir: si queda una ejecución pendiente, no publica todavía ni espera en un bucle. La siguiente finalización vuelve a activar el proceso.',
+          'Explicar: consulta jobs, steps y logs para distinguir errores de compilación, infraestructura y pruebas. Un build exitoso no demuestra por sí solo que haya tests aprobados; sin evidencia, declara la limitación.',
+          'Revalidar: antes de escribir, comprueba de nuevo el SHA y las ejecuciones. Si cambiaron, se abstiene para no reemplazar un reporte vigente con datos obsoletos.',
+        ],
+      },
+      {
+        type: 'animation',
+        animation: 'agentic-workflow',
+        caption:
+          'Explora cuatro escenarios simplificados de PR Build Report: publicar una instantánea o abstenerse cuando falta evidencia, cambió el commit o no hay novedades.',
+      },
+      { type: 'heading', text: 'Un único Issue, incluso con reintentos' },
+      {
+        type: 'paragraph',
+        text: 'El reporte mantiene el título estable «[PR builds] Reporte del PR #<número>», la etiqueta pr-build-report y un marcador de identidad en el cuerpo. Busca Issues abiertos y cerrados, verifica que el autor sea el bot y compara una instantánea de SHA, IDs de ejecución, intentos y conclusiones. Si ya existe la misma instantánea, usa noop; si hay novedades, reemplaza el cuerpo del mismo Issue, incluso cerrado, sin reabrirlo.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Las salidas autorizadas son create-issue y update-issue, limitadas a una operación de cada tipo por ejecución, además de noop para no escribir. La actualización exige la etiqueta del reporte. El Issue se organiza en Resumen, Builds, Pruebas y Problemas y siguientes pasos, con enlaces a la evidencia. Reporta también fallos, cancelaciones, timeouts y omisiones: su objetivo es informar, no maquillar el estado ni corregir código o relanzar workflows.',
+      },
+      {
+        type: 'quote',
+        text: 'Un buen flujo agéntico no solo sabe qué hacer: también define cuándo no actuar y qué evidencia respalda cada conclusión.',
+      },
+      { type: 'heading', text: 'Seguridad: separar análisis y escritura' },
+      {
+        type: 'paragraph',
+        text: 'Los safe-outputs separan las propuestas del agente de los trabajos que validan y aplican las escrituras con permisos específicos. En este ejemplo, el acceso a contenido, Actions, Issues y PRs se declara de lectura; el permiso de solicitudes a Copilot tiene otra finalidad: la inferencia. El modelo general de gh-aw combina permisos mínimos, aislamiento y controles de red. Es defensa en profundidad, no una garantía absoluta contra instrucciones maliciosas.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Este workflow admite eventos de distintos autores, incluidos forks cuyos builds corran en el repositorio. Por eso trata títulos, ramas, cuerpos y logs como datos no confiables: prohíbe hacer checkout del PR, ejecutar su código, descargar o ejecutar artifacts y obedecer órdenes encontradas en sus resultados. Las instrucciones y los filtros de identidad complementan los límites técnicos; no basta con pedir al modelo que sea prudente.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Mantén también control humano sobre cambios de permisos y resultados relevantes. Al operar estos flujos, revisa costes de inferencia, duración, calidad de los reportes y frecuencia de salidas innecesarias. En este repositorio, los cambios del reporte se hacen en su Markdown y se regeneran con gh aw compile pr-build-report --validate, versionando los dos archivos.',
+      },
+      { type: 'heading', text: 'Otros casos de uso agénticos comunes' },
+      {
+        type: 'paragraph',
+        text: 'Además del reporte de builds de este blog, el quick start y las guías enlazadas muestran patrones reutilizables. Son ejemplos documentados, no automatizaciones adicionales instaladas en este repositorio.',
+      },
+      {
+        type: 'list',
+        items: [
+          'Estado del repositorio: repo-status reúne actividad y publica un informe en un Issue, con activación diaria o manual. Es el punto de entrada del quick start.',
+          'Clasificación de incidencias: analizar Issues nuevos o reabiertos, proponer categorías y añadir únicamente etiquetas permitidas. Reduce trabajo repetitivo sin inventar prioridades fuera de las reglas del equipo.',
+          'Revisión de pull requests: interpretar el diff y publicar observaciones o un resumen mediante salidas controladas. Complementa las pruebas y la revisión humana; no implica aprobar ni fusionar automáticamente.',
+          'Notas de versión: sintetizar cambios tras una release y preparar un borrador en un Issue. El patrón documental no equivale a modificar automáticamente las notas publicadas.',
+          'Mantenimiento de documentación: detectar contenido desactualizado y proponer cambios en una PR en borrador para revisión, en lugar de editar directamente la rama principal.',
+        ],
+      },
+      { type: 'heading', text: 'Empezar por un resultado verificable' },
+      {
+        type: 'paragraph',
+        text: 'Elige una tarea con entradas identificables, una salida pequeña y criterios claros de abstención. PR Build Report ilustra esa combinación: CI produce la evidencia, el agente la interpreta y una salida segura publica el resumen. La mejora no está en añadir autonomía sin límite, sino en reducir el trabajo de interpretación manteniendo trazabilidad y revisión.',
+      },
+      { type: 'heading', text: 'Fuentes y referencias' },
+      {
+        type: 'paragraph',
+        text: 'Contenido contrastado el 23 de septiembre de 2026 con los archivos de este repositorio y el código fuente público de la documentación oficial en GitHub. Los comandos y capacidades pueden evolucionar; consulta las guías vigentes antes de configurar un entorno.',
+      },
+      {
+        type: 'link',
+        text: 'Guía oficial: Quick Start de GitHub Agentic Workflows',
+        href: 'https://github.github.com/gh-aw/setup/quick-start/',
+      },
+      {
+        type: 'link',
+        text: 'Cómo funcionan los workflows y sus salidas seguras',
+        href: 'https://github.github.com/gh-aw/introduction/how-they-work/',
+      },
+      {
+        type: 'link',
+        text: 'PR Build Report: definición de este repositorio',
+        href: 'https://github.com/mageroni/Technical-Blog/blob/main/.github/workflows/pr-build-report.md',
+      },
+      {
+        type: 'link',
+        text: 'CI del blog: lint, tests y build',
+        href: 'https://github.com/mageroni/Technical-Blog/blob/main/.github/workflows/ci.yml',
+      },
+      {
+        type: 'link',
+        text: 'Ejemplo repo-status del quick start',
+        href: 'https://github.com/githubnext/agentics/blob/main/workflows/repo-status.md',
+      },
+      {
+        type: 'link',
+        text: 'Guía: clasificación de Issues con IA',
+        href: 'https://github.github.com/gh-aw/gallery/ai-issue-triage/',
+      },
+      {
+        type: 'link',
+        text: 'Guía: revisión automatizada de pull requests',
+        href: 'https://github.github.com/gh-aw/gallery/automated-pr-review/',
+      },
+      {
+        type: 'link',
+        text: 'Guía: borradores de notas de versión',
+        href: 'https://github.github.com/gh-aw/gallery/ai-release-notes/',
+      },
+      {
+        type: 'link',
+        text: 'Guía: mantenimiento de documentación',
+        href: 'https://github.github.com/gh-aw/gallery/docs-automation/',
+      },
+    ],
+  },
+  {
     slug: 'enterprise-managed-settings-gobernanza-de-copilot',
     title: 'Enterprise Managed Settings: gobernar Copilot más allá del proyecto',
     summary:

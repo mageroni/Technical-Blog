@@ -69,4 +69,17 @@ describe('App', () => {
     expect(screen.getByRole('link', { name: 'Guía inicial: Getting started with enterprise-managed settings' }))
       .toHaveAttribute('href', 'https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started')
   })
+
+  it('encuentra Agentic Workflows y abre el ejemplo del repositorio', async () => {
+    render(<App />)
+    fireEvent.change(screen.getByLabelText('Buscar artículos'), {
+      target: { value: 'Agentic Workflows' },
+    })
+    fireEvent.click(screen.getByText('Agentic Workflows: del evento al reporte con IA'))
+
+    expect(await screen.findByRole('heading', { name: 'El caso real del blog: PR Build Report' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Build pendiente' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Guía oficial: Quick Start de GitHub Agentic Workflows' }))
+      .toHaveAttribute('href', 'https://github.github.com/gh-aw/setup/quick-start/')
+  })
 })
