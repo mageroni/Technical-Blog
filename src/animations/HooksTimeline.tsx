@@ -44,7 +44,7 @@ export default function HooksTimeline() {
   useEffect(() => {
     if (!playing) return
     const timer = window.setTimeout(() => {
-      setStep((prev) => (prev + 1 > timeline.length ? 1 : prev + 1))
+      setStep((prev) => (prev + 1) % (timeline.length + 1))
     }, 1900)
     return () => window.clearTimeout(timer)
   }, [step, playing])

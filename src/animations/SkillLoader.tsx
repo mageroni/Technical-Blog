@@ -1,34 +1,39 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-const steps = [
-  {
-    title: 'El desarrollador escribe un prompt',
-    detail: '“Publica la release y avisa al canal de soporte”.',
-  },
-  {
-    title: 'El agente cargador analiza la intención',
-    detail: 'Detecta que hacen falta skills de release y de notificaciones.',
-  },
-  {
-    title: 'Consulta el catálogo aprobado',
-    detail: 'Un repositorio central mantiene la lista curada por seguridad.',
-  },
-  {
-    title: 'Materializa las skills en el repo',
-    detail: 'Escribe el Markdown y los scripts en .github/skills/.',
-  },
-  {
-    title: 'Delega la ejecución',
-    detail: 'Otro agente continúa la tarea, ya con las capacidades instaladas.',
-  },
-]
-
 const skillFiles = [
   'release-notes/SKILL.md',
   'release-notes/build.sh',
   'notify-support/SKILL.md',
   'notify-support/post.sh',
+]
+
+const steps = [
+  {
+    title: 'El desarrollador escribe un prompt',
+    detail: '“Publica la release y avisa al canal de soporte”.',
+    installedFiles: 0,
+  },
+  {
+    title: 'El agente cargador analiza la intención',
+    detail: 'Detecta que hacen falta skills de release y de notificaciones.',
+    installedFiles: 0,
+  },
+  {
+    title: 'Consulta el catálogo aprobado',
+    detail: 'Un repositorio central mantiene la lista curada por seguridad.',
+    installedFiles: 2,
+  },
+  {
+    title: 'Materializa las skills en el repo',
+    detail: 'Escribe el Markdown y los scripts en .github/skills/.',
+    installedFiles: skillFiles.length,
+  },
+  {
+    title: 'Delega la ejecución',
+    detail: 'Otro agente continúa la tarea, ya con las capacidades instaladas.',
+    installedFiles: skillFiles.length,
+  },
 ]
 
 export default function SkillLoader() {
@@ -44,7 +49,7 @@ export default function SkillLoader() {
     return () => window.clearTimeout(timer)
   }, [step, playing])
 
-  const installedCount = step >= 3 ? skillFiles.length : step === 2 ? 2 : 0
+  const installedCount = steps[step].installedFiles
 
   return (
     <div className="anim anim--pipeline">
