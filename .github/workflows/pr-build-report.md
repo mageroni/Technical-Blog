@@ -74,18 +74,24 @@ y `noop`; nunca escribas directamente mediante la API.
    Excluye siempre `PR Build Report` y
    `.github/workflows/pr-build-report.lock.yml`.
 2. Agrupa por `workflow_id`, conserva la ejecución más reciente por `run_number`
-   y su último `run_attempt` (no ordenes por `updated_at`). No mezcles intentos
-   anteriores ni commits antiguos. Consulta jobs del intento concreto mediante
-   `actions/runs/<run_id>/attempts/<run_attempt>/jobs`, con paginación,
-   incluyendo todos los jobs de matriz.
+   y su último `run_attempt` (no ordenes por `updated_at`). No mezcles ejecuciones
+   ni commits antiguos. Consulta `actions/runs/<run_id>/jobs?filter=all` con
+   paginación y, si hace falta, `actions/runs/<run_id>/attempts/<intento>/jobs`.
+   Reconstruye los resultados efectivos: para cada job, incluida su combinación
+   de matriz, conserva su última ejecución. Un reintento parcial («Re-run failed
+   jobs») mantiene los éxitos de jobs que no se repitieron; incluye esos resultados
+   y sus pruebas, indicando el intento de origen. Descarta únicamente resultados
+   reemplazados por una ejecución posterior del mismo job. Si los nombres de jobs
+   no permiten distinguirlos con certeza, declara esa limitación sin inventar
+   asociaciones ni totales.
 3. Si no hay ejecuciones verificables o alguna no está `completed` (también
    `queued`, `waiting`, `pending`, `requested`, `in_progress`), llama a `noop`.
    No esperes en un bucle: la siguiente finalización volverá a activar el
    reporte. No filtres la consulta por `status=completed`, pues ocultaría
    pendientes. No declares finalizado un conjunto parcialmente consultado;
    si se alcanza el límite de resultados de la API, llama a `noop`.
-4. Lee jobs, steps y logs de pruebas de los intentos seleccionados con `gh run
-   view` / `gh api`. Resume pruebas aprobadas, fallidas y omitidas, suites,
+4. Lee steps y logs de cada job efectivo en su intento de origen con `gh run
+   view --attempt` / `gh api`. Resume pruebas aprobadas, fallidas y omitidas, suites,
    duración y errores concretos solo cuando exista evidencia. No confundas
    éxito del build con pruebas aprobadas. Si no hay pruebas o los logs
    expiraron/no están disponibles, indica «Sin resultados de pruebas
