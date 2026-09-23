@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { motion, useAnimationFrame, useMotionValue, useTransform } from 'framer-motion'
+import {
+  motion,
+  useAnimationFrame,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from 'framer-motion'
 
 type Experience = {
   id: string
@@ -44,10 +50,11 @@ const RADIUS = 108
 const CENTER = 150
 
 export default function CopilotExperiences() {
+  const reduceMotion = useReducedMotion()
   const [selected, setSelected] = useState<Experience>(experiences[0])
-  const [spinning, setSpinning] = useState(true)
+  const [spinning, setSpinning] = useState(!reduceMotion)
   const [hovering, setHovering] = useState(false)
-  const rotating = spinning && !hovering
+  const rotating = spinning && !hovering && !reduceMotion
   const orbitAngle = useMotionValue(0)
   const counterAngle = useTransform(orbitAngle, (value) => -value)
 
@@ -91,7 +98,7 @@ export default function CopilotExperiences() {
                   className="orbit__node"
                   tabIndex={0}
                   role="button"
-                  aria-label={experience.label}
+                  aria-label={`Seleccionar ${experience.label} en la órbita`}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter' || event.key === ' ') {
                       event.preventDefault()
@@ -137,8 +144,12 @@ export default function CopilotExperiences() {
             r={48}
             className="orbit__core"
             initial={{ r: 48 }}
-            animate={{ r: [46, 51, 46] }}
-            transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
+            animate={reduceMotion ? { r: 48 } : { r: [46, 51, 46] }}
+            transition={{
+              duration: 3.4,
+              repeat: reduceMotion ? 0 : Infinity,
+              ease: 'easeInOut',
+            }}
           />
           <text x={CENTER} y={CENTER - 2} textAnchor="middle" className="orbit__core-text">
             Plano

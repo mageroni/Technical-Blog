@@ -245,7 +245,6 @@ button {
 }
 
 .card {
-  --accent: #7c5cff;
   position: relative;
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -352,10 +351,6 @@ button {
 
 .back:hover {
   color: var(--text);
-}
-
-.post {
-  --accent: #7c5cff;
 }
 
 .post__header h1 {
@@ -596,7 +591,6 @@ button {
 
 .pipeline::before,
 .pipeline__progress {
-  content: '';
   position: absolute;
   left: 2%;
   right: 2%;
@@ -606,6 +600,7 @@ button {
 }
 
 .pipeline::before {
+  content: '';
   background: var(--border);
 }
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 
 type Server = {
   id: string
@@ -15,6 +15,7 @@ const servers: Server[] = [
 ]
 
 export default function McpFlow() {
+  const reduceMotion = useReducedMotion()
   const [enabled, setEnabled] = useState<string[]>(['jira', 'github'])
 
   const toggle = (id: string) =>
@@ -30,8 +31,17 @@ export default function McpFlow() {
         <div className="mcp__client">
           <motion.div
             className="mcp__client-core"
-            animate={{ boxShadow: ['0 0 0 0 rgba(59,130,246,0.45)', '0 0 0 18px rgba(59,130,246,0)'] }}
-            transition={{ duration: 2.2, repeat: Infinity }}
+            animate={
+              reduceMotion
+                ? undefined
+                : {
+                    boxShadow: [
+                      '0 0 0 0 rgba(59,130,246,0.45)',
+                      '0 0 0 18px rgba(59,130,246,0)',
+                    ],
+                  }
+            }
+            transition={{ duration: 2.2, repeat: reduceMotion ? 0 : Infinity }}
           >
             Agente
           </motion.div>
@@ -45,7 +55,7 @@ export default function McpFlow() {
               <div className="mcp__lane" key={server.id}>
                 <div className="mcp__wire" aria-hidden="true">
                   <AnimatePresence>
-                    {isOn && (
+                    {isOn && !reduceMotion && (
                       <>
                         <motion.span
                           className="mcp__packet"

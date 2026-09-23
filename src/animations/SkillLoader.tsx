@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 
 const skillFiles = [
   'release-notes/SKILL.md',
@@ -37,8 +37,9 @@ const steps = [
 ]
 
 export default function SkillLoader() {
+  const reduceMotion = useReducedMotion()
   const [step, setStep] = useState(0)
-  const [playing, setPlaying] = useState(true)
+  const [playing, setPlaying] = useState(!reduceMotion)
 
   useEffect(() => {
     if (!playing) return
@@ -74,11 +75,14 @@ export default function SkillLoader() {
             <motion.span
               className="pipeline__dot"
               animate={
-                index === step
+                index === step && !reduceMotion
                   ? { scale: [1, 1.35, 1], opacity: 1 }
-                  : { scale: 1, opacity: 0.65 }
+                  : { scale: 1, opacity: index === step ? 1 : 0.65 }
               }
-              transition={{ duration: 1.1, repeat: index === step ? Infinity : 0 }}
+              transition={{
+                duration: 1.1,
+                repeat: index === step && !reduceMotion ? Infinity : 0,
+              }}
             />
             <span className="pipeline__index">{index + 1}</span>
           </button>

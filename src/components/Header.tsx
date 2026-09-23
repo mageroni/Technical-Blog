@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import type { Theme } from '../lib/useTheme'
 
 type Props = {
@@ -8,12 +8,14 @@ type Props = {
 }
 
 export default function Header({ theme, onToggleTheme, onHome }: Props) {
+  const reduceMotion = useReducedMotion()
+
   return (
     <header className="topbar">
       <button type="button" className="brand" onClick={onHome}>
         <motion.span
           className="brand__mark"
-          animate={{ rotate: [0, 8, -8, 0] }}
+          animate={reduceMotion ? undefined : { rotate: [0, 8, -8, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
           aria-hidden="true"
         >

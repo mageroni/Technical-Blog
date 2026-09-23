@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 
 type Event = {
   hook: string
@@ -38,8 +38,9 @@ const timeline: Event[] = [
 ]
 
 export default function HooksTimeline() {
+  const reduceMotion = useReducedMotion()
   const [step, setStep] = useState(0)
-  const [playing, setPlaying] = useState(true)
+  const [playing, setPlaying] = useState(!reduceMotion)
 
   useEffect(() => {
     if (!playing) return
@@ -85,11 +86,14 @@ export default function HooksTimeline() {
                         : 'hooks__pulse'
                     }
                     animate={
-                      isCurrent
+                      isCurrent && !reduceMotion
                         ? { scale: [1, 1.6, 1], opacity: [1, 0.6, 1] }
                         : { scale: 1, opacity: reached ? 1 : 0.35 }
                     }
-                    transition={{ duration: 1, repeat: isCurrent ? Infinity : 0 }}
+                    transition={{
+                      duration: 1,
+                      repeat: isCurrent && !reduceMotion ? Infinity : 0,
+                    }}
                   />
                   <span className="hooks__hook">{event.hook}</span>
                   <span className="hooks__moment">{event.moment}</span>
@@ -128,8 +132,8 @@ export default function HooksTimeline() {
             )}
             <motion.span
               className="console__cursor"
-              animate={{ opacity: [1, 0, 1] }}
-              transition={{ duration: 1.1, repeat: Infinity }}
+              animate={reduceMotion ? { opacity: 1 } : { opacity: [1, 0, 1] }}
+              transition={{ duration: 1.1, repeat: reduceMotion ? 0 : Infinity }}
             />
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import CopilotExperiences from '../animations/CopilotExperiences'
 import HooksTimeline from '../animations/HooksTimeline'
 import McpFlow from '../animations/McpFlow'
@@ -7,12 +7,19 @@ import SkillLoader from '../animations/SkillLoader'
 
 describe('CopilotExperiences', () => {
   it('muestra el detalle de la experiencia seleccionada', () => {
-    const { container } = render(<CopilotExperiences />)
-    const controls = container.querySelector('.anim__controls') as HTMLElement
-    fireEvent.click(within(controls).getByRole('button', { name: 'Copilot SDK' }))
+    render(<CopilotExperiences />)
+    fireEvent.click(screen.getByRole('button', { name: 'Copilot SDK' }))
     expect(
       screen.getByText(/librería para TypeScript, Python, Go o .NET/),
     ).toBeInTheDocument()
+  })
+
+  it('permite seleccionar una experiencia desde la propia órbita', () => {
+    render(<CopilotExperiences />)
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Seleccionar Copilot CLI en la órbita' }),
+    )
+    expect(screen.getByText(/El agente en la terminal/)).toBeInTheDocument()
   })
 
   it('permite pausar y reanudar la órbita', () => {

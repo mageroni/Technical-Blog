@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { allTags, posts } from '../data/posts'
 import { filterPosts, sortByDateDesc } from '../lib/posts'
 import PostCard from './PostCard'
@@ -18,6 +18,7 @@ export default function Home({
   onTagChange,
   onOpen,
 }: Props) {
+  const reduceMotion = useReducedMotion()
   const visible = sortByDateDesc(filterPosts(posts, query, tag))
 
   return (
@@ -25,11 +26,11 @@ export default function Home({
       <section className="hero">
         <div className="hero__aurora" aria-hidden="true">
           <motion.span
-            animate={{ x: [0, 40, -20, 0], y: [0, -30, 20, 0] }}
+            animate={reduceMotion ? undefined : { x: [0, 40, -20, 0], y: [0, -30, 20, 0] }}
             transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
           />
           <motion.span
-            animate={{ x: [0, -50, 30, 0], y: [0, 25, -25, 0] }}
+            animate={reduceMotion ? undefined : { x: [0, -50, 30, 0], y: [0, 25, -25, 0] }}
             transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
           />
         </div>
