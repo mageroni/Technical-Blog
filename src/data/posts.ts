@@ -4,9 +4,11 @@ export type AnimationId =
   | 'mcp-flow'
   | 'hooks-timeline'
   | 'token-budget'
+  | 'managed-settings'
 
 export type Block =
   | { type: 'paragraph'; text: string }
+  | { type: 'link'; text: string; href: string }
   | { type: 'heading'; text: string }
   | { type: 'list'; items: string[] }
   | { type: 'quote'; text: string }
@@ -26,6 +28,196 @@ export type Post = {
 }
 
 export const posts: Post[] = [
+  {
+    slug: 'enterprise-managed-settings-gobernanza-de-copilot',
+    title: 'Enterprise Managed Settings: gobernar Copilot más allá del proyecto',
+    summary:
+      'Qué son los ajustes administrados de Copilot, cómo desplegarlos desde GitHub y por qué una base empresarial complementa la configuración de proyecto y de usuario.',
+    author: 'Equipo Technical Blog',
+    date: '2026-09-23',
+    tags: ['GitHub Copilot', 'Gobernanza', 'DevOps'],
+    accent: '#22c1a4',
+    animation: 'managed-settings',
+    blocks: [
+      {
+        type: 'paragraph',
+        text: 'Configurar Copilot para una persona es sencillo. Mantener criterios consistentes entre equipos, repositorios y herramientas requiere algo más que pedir a todos que copien el mismo archivo. Enterprise Managed Settings permite definir y distribuir ajustes administrados desde un punto central, con excepciones controladas para equipos de la empresa.',
+      },
+      { type: 'heading', text: '¿Qué son Enterprise Managed Settings?' },
+      {
+        type: 'paragraph',
+        text: 'Son ajustes que los clientes compatibles de GitHub Copilot reciben y aplican como configuración empresarial. El archivo managed-settings.json permite expresar propiedades admitidas para gobernar el comportamiento del cliente: por ejemplo, bloquear determinadas operaciones, distribuir plugins aprobados o configurar el aislamiento de sesiones. No es un prompt ni un archivo de instrucciones que le pide al modelo que respete una regla.',
+      },
+      {
+        type: 'paragraph',
+        text: 'La documentación incluye Copilot CLI, VS Code, la aplicación GitHub Copilot, Copilot cloud agent y los IDE de JetBrains, pero no todas las propiedades funcionan en todos los clientes. Antes de prometer un control a seguridad o a un cliente, revisa la matriz de compatibilidad de la referencia oficial y verifica su comportamiento en las herramientas utilizadas.',
+      },
+      { type: 'heading', text: 'Empresa, proyecto y usuario: responsabilidades distintas' },
+      {
+        type: 'list',
+        items: [
+          'Usuario: preferencias personales y ajustes locales para trabajar con comodidad. No son un mecanismo fiable para imponer una base común a toda la empresa.',
+          'Proyecto: contexto y convenciones del repositorio, como instrucciones de desarrollo y configuración de herramientas. Resultan útiles para ese trabajo, pero replicarlas en muchos repositorios puede generar divergencias.',
+          'Empresa: controles y valores predeterminados administrados centralmente, aplicables según la propiedad, el cliente y el método de distribución. Las restricciones administradas no se anulan simplemente con una preferencia local.',
+        ],
+      },
+      {
+        type: 'paragraph',
+        text: 'No se trata de eliminar la personalización. Los ajustes de proyecto y usuario siguen siendo útiles en lo que la empresa deja abierto. Tampoco todas las claves administradas son un bloqueo: model configura el modelo predeterminado de nuevas conversaciones, no una prohibición de cambiarlo después entre los modelos permitidos.',
+      },
+      { type: 'heading', text: '¿Por qué es importante para los clientes?' },
+      {
+        type: 'list',
+        items: [
+          'Consistencia: una base compartida reduce la dependencia de configuraciones manuales y de que cada desarrollador recuerde actualizar su equipo.',
+          'Trazabilidad: alojar los ajustes en GitHub permite revisar cambios por pull request, conservar su historial y proteger quién puede aprobarlos.',
+          'Seguridad y cumplimiento: los controles compatibles ayudan a implementar requisitos internos; no sustituyen una evaluación de riesgos ni garantizan cumplimiento por sí solos.',
+          'Flexibilidad controlada: los equipos pueden recibir excepciones explícitas sin convertir cada repositorio en una política empresarial diferente.',
+          'Operación a escala: un cambio central evita mantener copias en cada proyecto, aunque hay que contemplar los tiempos de actualización y comprobar su aplicación.',
+        ],
+      },
+      {
+        type: 'quote',
+        text: 'El proyecto describe cómo trabajar; el usuario personaliza su experiencia; la empresa define la base de gobierno que no debe depender de ninguno de los dos.',
+      },
+      { type: 'heading', text: '1. Crear y seleccionar la fuente de gobierno' },
+      {
+        type: 'paragraph',
+        text: 'Para un despliegue server-managed, elige una organización de la empresa y crea un repositorio llamado .github-private. GitHub recomienda visibilidad interna para que los miembros puedan consultar los ajustes. Limita las modificaciones a administradores y responsables de IA mediante CODEOWNERS y rulesets con las revisiones necesarias.',
+      },
+      {
+        type: 'paragraph',
+        text: 'No basta con crear el repositorio: entra en la empresa, abre AI controls → Agents → Configuration source y selecciona la organización que contiene .github-private. Configuration summary mostrará la configuración obtenida de esa fuente.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Los ajustes se aplican a quienes reciben una licencia de Copilot de la empresa o de sus organizaciones, aunque no tengan acceso al repositorio o a la organización que lo aloja. Una empresa dedicada a Copilot Business sin organizaciones requiere considerar la guía específica enlazada al final.',
+      },
+      { type: 'heading', text: '2. Empezar con un ajuste de bajo impacto' },
+      {
+        type: 'paragraph',
+        text: 'Dentro de .github-private, crea copilot/managed-settings.json y confirma el cambio en la rama predeterminada. La guía propone comenzar con auto como modelo predeterminado: Copilot selecciona entre los modelos permitidos por la empresa y puede reducir problemas de límites de solicitudes.',
+      },
+      {
+        type: 'code',
+        language: 'json',
+        code: `{
+  "model": "auto"
+}`,
+      },
+      {
+        type: 'paragraph',
+        text: 'Este ejemplo cambia el inicio de las conversaciones nuevas; no obliga a mantener auto durante toda la sesión. La referencia admite model en CLI, VS Code, la aplicación GitHub Copilot y cloud agent, pero no en JetBrains. Usa un cliente compatible para probarlo.',
+      },
+      { type: 'heading', text: '3. Autorizar una excepción para un equipo' },
+      {
+        type: 'paragraph',
+        text: 'Supongamos que special-team necesita elegir su propio valor inicial. Crea ese equipo a nivel de empresa: no es simplemente un equipo de una organización. Luego reemplaza el contenido de copilot/managed-settings.json para declarar que model admite una excepción de equipo, manteniendo auto como valor general.',
+      },
+      {
+        type: 'code',
+        language: 'json',
+        code: `{
+  "model": { "overridable": "auto" }
+}`,
+      },
+      {
+        type: 'paragraph',
+        text: 'Crea copilot/teams/no-auto.json con el siguiente contenido. unmanaged retira el valor administrado de esta propiedad para el equipo; no desactiva el resto de los controles empresariales ni significa que cualquier usuario pueda saltarse una política.',
+      },
+      {
+        type: 'code',
+        language: 'json',
+        code: `{
+  "model": "unmanaged"
+}`,
+      },
+      {
+        type: 'paragraph',
+        text: 'Crea copilot/team-mappings.json para vincular el archivo con el slug del equipo. La clave es el nombre del archivo y el valor es una lista de slugs de equipos empresariales; un archivo puede servir a varios equipos.',
+      },
+      {
+        type: 'code',
+        language: 'json',
+        code: `{
+  "no-auto.json": ["special-team"]
+}`,
+      },
+      {
+        type: 'paragraph',
+        text: 'Confirma los tres archivos en la rama predeterminada. Solo las propiedades compatibles marcadas como overridable admiten estas excepciones; las demás permanecen bajo el control de la configuración base. Para usuarios que pertenecen a varios equipos, revisa las reglas de combinación en la guía de excepciones antes del despliegue.',
+      },
+      {
+        type: 'animation',
+        animation: 'managed-settings',
+        caption:
+          'Alterna entre un usuario general y special-team para observar el valor administrado de model en este ejemplo, sin otras fuentes de política.',
+      },
+      { type: 'heading', text: '4. Comprobar que la configuración está activa' },
+      {
+        type: 'list',
+        items: [
+          'Prueba con un usuario general y otro de special-team en un cliente que admita model. Inicia conversaciones nuevas: el primero debe recibir auto como valor inicial; el segundo no recibe ese valor impuesto por la empresa.',
+          'En despliegues server-managed, los cambios suelen llegar en aproximadamente una hora. Reiniciar el cliente o volver a iniciar sesión provoca una actualización inmediata.',
+          'Si no aparecen los ajustes, comprueba la fuente seleccionada, la rama predeterminada, la compatibilidad del cliente y que la licencia provenga de la empresa.',
+          'Si el usuario recibe licencias de varias entidades de facturación, revisa que Usage billed to en su configuración personal de Copilot señale a esta empresa.',
+        ],
+      },
+      { type: 'heading', text: 'Otras formas de distribuirlos y sus límites' },
+      {
+        type: 'paragraph',
+        text: 'El repositorio central no es la única opción. La distribución nativa por MDM sirve para equipos Windows y macOS administrados por TI; la distribución mediante un archivo local administrado está disponible también en Linux, contenedores y Codespaces. Ambas se aplican a clientes locales en los dispositivos configurados, independientemente del origen de la licencia, y no al cloud agent.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Si combinas fuentes, la precedencia documentada es MDM → server-managed → archivo administrado → ajustes de usuario. Como excepción, sandbox y permissions.deny, permissions.ask y permissions.allow se combinan en la dirección más restrictiva. Un archivo administrado del sistema no equivale a un archivo de configuración editable del proyecto.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Ten en cuenta la disponibilidad: en Copilot CLI, si falla la consulta al servidor y no hay respuesta en caché, la política server-managed no está disponible para esa sesión. Para restricciones que deban mantenerse sin respuesta del servidor, considera MDM o archivos administrados y sigue los requisitos de ubicación y permisos de la guía de despliegue.',
+      },
+      { type: 'heading', text: 'Una base común, no una receta universal' },
+      {
+        type: 'paragraph',
+        text: 'Empieza con el ejemplo de model, valida con un grupo piloto y documenta quién aprueba cambios y excepciones. Después incorpora únicamente las propiedades que hayas comprobado en tus clientes. El valor para una empresa no es tener más archivos JSON: es dejar de depender de configuraciones individuales para sostener criterios compartidos.',
+      },
+      { type: 'heading', text: 'Fuentes oficiales y siguientes pasos' },
+      {
+        type: 'paragraph',
+        text: 'Contenido basado en la documentación de GitHub consultada el 23 de septiembre de 2026. La compatibilidad y las propiedades disponibles pueden evolucionar; consulta estas referencias antes de un despliegue.',
+      },
+      {
+        type: 'link',
+        text: 'Guía inicial: Getting started with enterprise-managed settings',
+        href: 'https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started',
+      },
+      {
+        type: 'link',
+        text: 'Crear y seleccionar el repositorio .github-private',
+        href: 'https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/manage-agents/create-github-private-repo',
+      },
+      {
+        type: 'link',
+        text: 'Referencia de propiedades y compatibilidad por cliente',
+        href: 'https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/enterprise-administrators/enterprise-managed-settings',
+      },
+      {
+        type: 'link',
+        text: 'Excepciones para equipos empresariales',
+        href: 'https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/override-settings-for-teams',
+      },
+      {
+        type: 'link',
+        text: 'Métodos de despliegue, precedencia y requisitos locales',
+        href: 'https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/deploy-managed-settings',
+      },
+      {
+        type: 'link',
+        text: 'Copilot Business: empresas sin organizaciones',
+        href: 'https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/copilot-business-only',
+      },
+    ],
+  },
   {
     slug: 'las-muchas-caras-de-github-copilot',
     title: 'Las muchas caras de GitHub Copilot',

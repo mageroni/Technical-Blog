@@ -56,4 +56,17 @@ describe('App', () => {
       expect(document.documentElement.dataset.theme).toBe('light')
     })
   })
+
+  it('encuentra managed settings y abre el artículo con sus fuentes', async () => {
+    render(<App />)
+    fireEvent.change(screen.getByLabelText('Buscar artículos'), {
+      target: { value: 'Enterprise Managed Settings' },
+    })
+    fireEvent.click(screen.getByText('Enterprise Managed Settings: gobernar Copilot más allá del proyecto'))
+
+    expect(await screen.findByRole('heading', { name: '¿Qué son Enterprise Managed Settings?' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Equipo special-team' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Guía inicial: Getting started with enterprise-managed settings' }))
+      .toHaveAttribute('href', 'https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started')
+  })
 })
