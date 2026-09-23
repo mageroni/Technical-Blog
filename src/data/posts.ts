@@ -5,6 +5,7 @@ export type AnimationId =
   | 'hooks-timeline'
   | 'token-budget'
   | 'managed-settings'
+  | 'agentic-workflow'
 
 export type Block =
   | { type: 'paragraph'; text: string }

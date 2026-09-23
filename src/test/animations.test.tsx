@@ -5,6 +5,31 @@ import HooksTimeline from '../animations/HooksTimeline'
 import McpFlow from '../animations/McpFlow'
 import SkillLoader from '../animations/SkillLoader'
 import ManagedSettings from '../animations/ManagedSettings'
+import AgenticWorkflow from '../animations/AgenticWorkflow'
+
+describe('AgenticWorkflow', () => {
+  it('explica cuándo publicar o abstenerse sin ejecutar un workflow real', () => {
+    render(<AgenticWorkflow />)
+    expect(screen.getByRole('button', { name: 'Resultados completos', pressed: true })).toBeInTheDocument()
+    expect(screen.getByText('Publicar mediante safe-outputs')).toBeInTheDocument()
+
+    for (const [label, decision] of [
+      ['Build pendiente', 'noop: todavía no publicar'],
+      ['Commit anterior', 'noop: revisión obsoleta'],
+      ['Sin cambios', 'noop: instantánea idéntica'],
+    ]) {
+      fireEvent.click(screen.getByRole('button', { name: label }))
+      expect(screen.getByRole('button', { name: label, pressed: true })).toBeInTheDocument()
+      expect(screen.getAllByRole('button', { pressed: true })).toHaveLength(1)
+      expect(screen.getByText(decision)).toBeInTheDocument()
+      expect(screen.getByRole('img', { name: `PR Build Report: ${decision}` })).toBeInTheDocument()
+    }
+
+    fireEvent.click(screen.getByRole('button', { name: 'Resultados completos' }))
+    expect(screen.getByText('Publicar mediante safe-outputs')).toBeInTheDocument()
+    expect(screen.getByText(/Simulación didáctica/)).toBeInTheDocument()
+  })
+})
 
 describe('ManagedSettings', () => {
   it('alterna la excepción de equipo sin cambiar las demás políticas', () => {
