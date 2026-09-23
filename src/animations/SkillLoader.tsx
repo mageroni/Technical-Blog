@@ -12,27 +12,27 @@ const steps = [
   {
     title: 'El desarrollador escribe un prompt',
     detail: '“Publica la release y avisa al canal de soporte”.',
-    installedFiles: 0,
+    revealedFiles: 0,
   },
   {
     title: 'El agente cargador analiza la intención',
     detail: 'Detecta que hacen falta skills de release y de notificaciones.',
-    installedFiles: 0,
+    revealedFiles: 0,
   },
   {
     title: 'Consulta el catálogo aprobado',
     detail: 'Un repositorio central mantiene la lista curada por seguridad.',
-    installedFiles: 2,
+    revealedFiles: 2,
   },
   {
     title: 'Materializa las skills en el repo',
     detail: 'Escribe el Markdown y los scripts en .github/skills/.',
-    installedFiles: skillFiles.length,
+    revealedFiles: skillFiles.length,
   },
   {
     title: 'Delega la ejecución',
     detail: 'Otro agente continúa la tarea, ya con las capacidades instaladas.',
-    installedFiles: skillFiles.length,
+    revealedFiles: skillFiles.length,
   },
 ]
 
@@ -49,7 +49,7 @@ export default function SkillLoader() {
     return () => window.clearTimeout(timer)
   }, [step, playing])
 
-  const installedCount = steps[step].installedFiles
+  const revealedCount = steps[step].revealedFiles
 
   return (
     <div className="anim anim--pipeline">
@@ -114,10 +114,10 @@ export default function SkillLoader() {
               key={file}
               className="skill-tray__file"
               animate={{
-                opacity: index < installedCount ? 1 : 0.2,
-                y: index < installedCount ? 0 : 8,
+                opacity: index < revealedCount ? 1 : 0.2,
+                y: index < revealedCount ? 0 : 8,
                 borderColor:
-                  index < installedCount
+                  index < revealedCount
                     ? 'rgba(34, 193, 164, 0.8)'
                     : 'rgba(125, 125, 155, 0.25)',
               }}
