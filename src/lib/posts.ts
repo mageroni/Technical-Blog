@@ -35,6 +35,7 @@ export function readingTime(post: Post): number {
   const words = post.blocks.reduce((total, block) => {
     switch (block.type) {
       case 'paragraph':
+      case 'link':
       case 'heading':
       case 'quote':
         return total + block.text.split(/\s+/).length

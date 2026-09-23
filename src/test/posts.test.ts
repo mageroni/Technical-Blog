@@ -10,9 +10,29 @@ import {
 } from '../lib/posts'
 
 describe('contenido del blog', () => {
-  it('incluye cinco artículos con slug único', () => {
-    expect(posts).toHaveLength(5)
-    expect(new Set(posts.map((post) => post.slug)).size).toBe(5)
+  it('incluye seis artículos con slug único', () => {
+    expect(posts).toHaveLength(6)
+    expect(new Set(posts.map((post) => post.slug)).size).toBe(6)
+  })
+
+  it('incluye ejemplos JSON válidos y la fuente oficial de managed settings', () => {
+    const post = posts.find((entry) => entry.slug === 'enterprise-managed-settings-gobernanza-de-copilot')
+    expect(post).toBeDefined()
+    const examples = post!.blocks
+      .filter((block) => block.type === 'code')
+      .filter((block) => block.language === 'json')
+      .map((block) => JSON.parse(block.code))
+    expect(examples).toEqual([
+      { model: 'auto' },
+      { model: { overridable: 'auto' } },
+      { model: 'unmanaged' },
+      { 'no-auto.json': ['special-team'] },
+    ])
+    expect(post!.blocks).toContainEqual({
+      type: 'link',
+      text: 'Guía inicial: Getting started with enterprise-managed settings',
+      href: 'https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started',
+    })
   })
 
   it('cada artículo incluye al menos una animación registrada', () => {

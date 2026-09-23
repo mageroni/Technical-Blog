@@ -4,6 +4,23 @@ import CopilotExperiences from '../animations/CopilotExperiences'
 import HooksTimeline from '../animations/HooksTimeline'
 import McpFlow from '../animations/McpFlow'
 import SkillLoader from '../animations/SkillLoader'
+import ManagedSettings from '../animations/ManagedSettings'
+
+describe('ManagedSettings', () => {
+  it('alterna la excepción de equipo sin cambiar las demás políticas', () => {
+    render(<ManagedSettings />)
+    expect(screen.getByRole('button', { name: 'Usuario general', pressed: true })).toBeInTheDocument()
+    expect(screen.getByText(/Las conversaciones nuevas comienzan en auto/)).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Equipo special-team' }))
+    expect(screen.getByRole('button', { name: 'Equipo special-team', pressed: true })).toBeInTheDocument()
+    expect(screen.getByText(/deja de administrar el valor inicial/)).toBeInTheDocument()
+    expect(screen.getByText(/Las demás políticas siguen vigentes/)).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Usuario general' }))
+    expect(screen.getByText(/Las conversaciones nuevas comienzan en auto/)).toBeInTheDocument()
+  })
+})
 
 describe('CopilotExperiences', () => {
   it('muestra el detalle de la experiencia seleccionada', () => {

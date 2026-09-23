@@ -15,6 +15,8 @@ function renderBlock(block: Block, index: number) {
       return <h2 key={index}>{block.text}</h2>
     case 'paragraph':
       return <p key={index}>{block.text}</p>
+    case 'link':
+      return <p key={index}><a href={block.href}>{block.text}</a></p>
     case 'quote':
       return (
         <motion.blockquote
