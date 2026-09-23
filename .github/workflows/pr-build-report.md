@@ -15,6 +15,7 @@ concurrency:
   queue: max
   job-discriminator: ${{ github.run_id }}
 permissions:
+  copilot-requests: write
   contents: read
   actions: read
   issues: read
@@ -145,8 +146,12 @@ consultas y salidas al repositorio del evento.
 ## Activación y mantenimiento
 
 Este workflow debe estar en la rama predeterminada para recibir `workflow_run`.
-Usa el motor predeterminado de gh-aw (Copilot): configura el secreto de Actions
-`COPILOT_GITHUB_TOKEN` con acceso a Copilot conforme a
+Usa el motor predeterminado de gh-aw (Copilot) con `GITHUB_TOKEN` y el permiso
+`copilot-requests: write`, sin exigir el secreto `COPILOT_GITHUB_TOKEN`.
+Esta modalidad requiere una suscripción de Copilot compatible y la habilitación
+de solicitudes de Copilot desde Actions. Si no está disponible, configura
+`COPILOT_GITHUB_TOKEN` con acceso a Copilot y elimina `copilot-requests: write`
+antes de regenerar el lock, conforme a
 https://github.github.com/gh-aw/reference/engines/#github-copilot-default.
 Las lecturas y salidas seguras usan `GITHUB_TOKEN`; no necesitan un PAT adicional.
 GitHub Actions e Issues deben estar habilitados en el repositorio.
