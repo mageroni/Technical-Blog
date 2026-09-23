@@ -20,6 +20,8 @@ uno de ellos lleva una **animación interactiva del concepto que explica**.
 
 ## Puesta en marcha
 
+Usa Node.js 22.22.2 o superior dentro de la rama 22, como en CI.
+
 ```bash
 npm install
 npm run dev      # servidor de desarrollo en http://localhost:5173
@@ -33,6 +35,27 @@ npm run preview  # sirve el build de producción
 npm run lint     # oxlint
 npm test         # tests con Vitest + Testing Library
 ```
+
+## Integración continua y tests
+
+El workflow `.github/workflows/ci.yml` se ejecuta con cada push y pull request,
+y también permite ejecución manual desde GitHub Actions. Usa Node.js 22, caché de
+npm e instalación reproducible con `npm ci`; después ejecuta lint, tests y el
+build de producción, que incluye la comprobación de tipos de TypeScript.
+
+Para reproducir las comprobaciones localmente:
+
+```bash
+npm ci
+npm run lint
+npm test
+npm run build
+```
+
+Los tests están en `src/test/`. Además de las pruebas de contenido, búsqueda y
+componentes, `useHashRoute.test.ts` muestra cómo probar navegación por hash con
+`renderHook` y `waitFor`; `useTheme.test.ts` comprueba la preferencia del sistema,
+la restauración del tema y su persistencia en `localStorage`.
 
 ## Estructura
 
