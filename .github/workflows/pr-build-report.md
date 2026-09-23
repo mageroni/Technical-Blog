@@ -15,7 +15,6 @@ concurrency:
   queue: max
   job-discriminator: ${{ github.run_id }}
 permissions:
-  copilot-requests: write
   contents: read
   actions: read
   issues: read
@@ -146,13 +145,34 @@ consultas y salidas al repositorio del evento.
 ## Activación y mantenimiento
 
 Este workflow debe estar en la rama predeterminada para recibir `workflow_run`.
-Usa el motor predeterminado de gh-aw (Copilot) con `GITHUB_TOKEN` y el permiso
-`copilot-requests: write`, sin exigir el secreto `COPILOT_GITHUB_TOKEN`.
-Esta modalidad requiere una suscripción de Copilot compatible y la habilitación
-de solicitudes de Copilot desde Actions. Si no está disponible, configura
-`COPILOT_GITHUB_TOKEN` con acceso a Copilot y elimina `copilot-requests: write`
-antes de regenerar el lock, conforme a
-https://github.github.com/gh-aw/reference/engines/#github-copilot-default.
+Usa el motor predeterminado de gh-aw (Copilot). En repositorios personales,
+configura el secreto de Actions `COPILOT_GITHUB_TOKEN`:
+
+1. Con una cuenta con licencia activa de Copilot, crea un **fine-grained PAT**
+   en https://github.com/settings/personal-access-tokens/new.
+2. Selecciona tu cuenta de usuario como **Resource owner**, no una organización,
+   y habilita **Permissions → Account permissions → Copilot Requests → Read**.
+3. En este repositorio, abre **Settings → Secrets and variables → Actions →
+   New repository secret** y guarda el PAT con el nombre exacto
+   `COPILOT_GITHUB_TOKEN`. No lo guardes solo como variable ni como secreto de
+   un environment: este workflow no selecciona ninguno. Nunca añadas el valor
+   al código, al lock, a un Issue ni a los logs.
+4. Vuelve a ejecutar **PR Build Report** desde Actions con **Re-run failed jobs**.
+
+El error de activación `None of the following secrets are set: COPILOT_GITHUB_TOKEN`
+indica que ese secreto no está disponible. Añadirlo requiere acceso a la
+configuración del repositorio; un cambio de código no puede crearlo.
+Si el secreto existe, verifica su nombre y alcance; si la inferencia falla
+después, comprueba la vigencia del PAT, su permiso y la licencia de Copilot.
+
+La alternativa `permissions: copilot-requests: write` usa `GITHUB_TOKEN` para
+inferencia **solo con una suscripción de Copilot de organización y facturación
+centralizada habilitada**. No es un sustituto del PAT en este repositorio
+personal. Si el repositorio pasa a una organización compatible, añade ese
+permiso al bloque `permissions` y regenera el lock; en esa modalidad gh-aw
+ignora `COPILOT_GITHUB_TOKEN` para inferencia.
+Referencia: https://github.github.com/gh-aw/reference/auth/#copilot_github_token.
+
 Las lecturas y salidas seguras usan `GITHUB_TOKEN`; no necesitan un PAT adicional.
 GitHub Actions e Issues deben estar habilitados en el repositorio.
 
