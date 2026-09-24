@@ -1,4 +1,4 @@
-import { motion, useScroll, useSpring } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import { animations } from '../animations'
 import type { Block, Post } from '../data/posts'
 import { formatDate, readingTime } from '../lib/posts'
@@ -7,6 +7,79 @@ type Props = {
   post: Post
   onBack: () => void
   onTagSelect: (tag: string) => void
+}
+
+function ManagedSettingsHeaderAnimation() {
+  const reducedMotion = useReducedMotion()
+
+  return (
+    <motion.div
+      className="post__managed-settings"
+      initial={{ opacity: 0, x: 18, scale: 0.94 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      transition={{ duration: 0.55, delay: 0.15, ease: 'easeOut' }}
+    >
+      <svg
+        viewBox="0 0 340 190"
+        role="img"
+        aria-label="Tres capas de configuración: usuario, proyecto y empresa; la empresa establece la base administrada"
+      >
+        <motion.path
+          d="M170 42 V148"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeDasharray="5 6"
+          animate={reducedMotion ? undefined : { strokeDashoffset: [0, -22] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: 'linear' }}
+        />
+        <motion.rect
+          x="28"
+          y="18"
+          width="284"
+          height="42"
+          rx="10"
+          className="post__managed-layer post__managed-layer--enterprise"
+          animate={reducedMotion ? undefined : { y: [0, -3, 0] }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <text x="170" y="36" textAnchor="middle" className="post__managed-label">
+          EMPRESA · BASE GOBERNADA
+        </text>
+        <text x="170" y="51" textAnchor="middle" className="post__managed-value">
+          managed settings
+        </text>
+        <rect
+          x="28"
+          y="74"
+          width="284"
+          height="42"
+          rx="10"
+          className="post__managed-layer"
+        />
+        <text x="170" y="92" textAnchor="middle" className="post__managed-label">
+          PROYECTO · CONTEXTO DEL REPO
+        </text>
+        <text x="170" y="107" textAnchor="middle" className="post__managed-value">
+          reglas compartidas
+        </text>
+        <rect
+          x="28"
+          y="130"
+          width="284"
+          height="42"
+          rx="10"
+          className="post__managed-layer"
+        />
+        <text x="170" y="148" textAnchor="middle" className="post__managed-label">
+          USUARIO · PREFERENCIAS
+        </text>
+        <text x="170" y="163" textAnchor="middle" className="post__managed-value">
+          experiencia personal
+        </text>
+      </svg>
+    </motion.div>
+  )
 }
 
 function renderBlock(block: Block, index: number) {
@@ -95,6 +168,9 @@ export default function PostView({ post, onBack, onTagSelect }: Props) {
       </button>
 
       <header className="post__header">
+        {post.slug === 'enterprise-managed-settings-gobernanza-de-copilot' && (
+          <ManagedSettingsHeaderAnimation />
+        )}
         <div className="post__meta">
           <time dateTime={post.date}>{formatDate(post.date)}</time>
           <span>·</span>

@@ -150,8 +150,58 @@ button {
   background: rgba(34, 193, 164, 0.5);
 }
 
+.hero__constellation {
+  position: absolute;
+  z-index: 0;
+  top: 1.2rem;
+  right: -1.5rem;
+  width: min(38vw, 360px);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.hero__constellation svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.hero__orbit,
+.hero__spark-line {
+  fill: none;
+  stroke: color-mix(in srgb, var(--accent) 68%, white);
+  stroke-width: 1;
+}
+
+.hero__orbit--two {
+  stroke: rgba(34, 193, 164, 0.75);
+  stroke-dasharray: 4 8;
+}
+
+.hero__spark-line {
+  stroke: rgba(255, 255, 255, 0.45);
+  stroke-dasharray: 3 7;
+}
+
+.hero__node {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 75%, transparent));
+}
+
+.hero__node--main {
+  fill: #fff;
+  stroke: var(--accent);
+  stroke-width: 7;
+}
+
+.hero__node--one,
+.hero__node--three {
+  fill: #22c1a4;
+}
+
 .hero__eyebrow {
   position: relative;
+  z-index: 1;
   margin: 0 0 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -161,15 +211,26 @@ button {
 
 .hero h1 {
   position: relative;
+  z-index: 1;
   font-size: clamp(2.1rem, 5.5vw, 3.4rem);
   max-width: 18ch;
 }
 
 .hero__lead {
   position: relative;
+  z-index: 1;
   max-width: 62ch;
   color: var(--text-muted);
   font-size: 1.05rem;
+}
+
+@media (max-width: 700px) {
+  .hero__constellation {
+    top: 0.5rem;
+    right: -5rem;
+    width: 280px;
+    opacity: 0.55;
+  }
 }
 
 /* ---------- filters ---------- */
@@ -358,6 +419,55 @@ button {
   --accent: #7c5cff;
 }
 
+.post__header {
+  position: relative;
+}
+
+.post__managed-settings {
+  position: absolute;
+  top: -1.2rem;
+  right: -1rem;
+  width: min(42%, 340px);
+  color: var(--accent);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.post__managed-settings svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.post__managed-layer {
+  fill: var(--surface);
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.post__managed-layer--enterprise {
+  fill: color-mix(in srgb, var(--accent) 16%, var(--surface));
+  stroke: color-mix(in srgb, var(--accent) 72%, var(--border));
+}
+
+.post__managed-label,
+.post__managed-value {
+  font-family: inherit;
+  letter-spacing: 0.08em;
+}
+
+.post__managed-label {
+  fill: var(--text-muted);
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.post__managed-value {
+  fill: var(--text);
+  font-size: 9px;
+  letter-spacing: 0;
+}
+
 .post__header h1 {
   font-size: clamp(1.9rem, 4.5vw, 3rem);
   max-width: 20ch;
@@ -386,6 +496,17 @@ button {
   list-style: none;
   padding: 0;
   margin: 0 0 2rem;
+}
+
+@media (max-width: 700px) {
+  .post__managed-settings {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: min(100%, 340px);
+    margin: -0.5rem 0 1.5rem auto;
+    opacity: 0.72;
+  }
 }
 
 .post__body {

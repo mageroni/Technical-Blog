@@ -33,6 +33,52 @@ export default function Home({
             transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
           />
         </div>
+        <motion.div
+          className="hero__constellation"
+          aria-hidden="true"
+          initial={{ opacity: 0, scale: 0.9, rotate: -8 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ duration: 0.8, delay: 0.25, ease: 'easeOut' }}
+        >
+          <svg viewBox="0 0 360 240" role="presentation">
+            <motion.ellipse
+              className="hero__orbit hero__orbit--one"
+              cx="180"
+              cy="120"
+              rx="138"
+              ry="62"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
+            />
+            <motion.ellipse
+              className="hero__orbit hero__orbit--two"
+              cx="180"
+              cy="120"
+              rx="96"
+              ry="42"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
+            />
+            <motion.path
+              className="hero__spark-line"
+              d="M60 157 L126 80 L198 145 L286 63"
+              animate={{ pathLength: [0, 1, 1], opacity: [0.2, 0.8, 0.2] }}
+              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <motion.circle
+              className="hero__node hero__node--main"
+              cx="180"
+              cy="120"
+              r="14"
+              animate={{ scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <circle className="hero__node hero__node--one" cx="60" cy="157" r="5" />
+            <circle className="hero__node hero__node--two" cx="126" cy="80" r="5" />
+            <circle className="hero__node hero__node--three" cx="198" cy="145" r="5" />
+            <circle className="hero__node hero__node--four" cx="286" cy="63" r="5" />
+          </svg>
+        </motion.div>
 
         <motion.p
           className="hero__eyebrow"
