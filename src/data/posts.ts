@@ -44,6 +44,10 @@ export const posts: Post[] = [
         type: 'paragraph',
         text: 'Un agente no genera valor por estar disponible: lo genera cuando ayuda a un equipo a completar una tarea importante con menos tiempo, menos retrabajo o mejor calidad. Para quien gestiona equipos, AgentOps es la disciplina que conecta esa promesa técnica con prioridades de negocio, controles operativos y evidencia de retorno.',
       },
+      {
+        type: 'paragraph',
+        text: 'Este enfoque será presentado en Nerdearla Argentina 2026, en la charla “AgentOps 4 Managers: Adopción + ROI”.',
+      },
       { type: 'heading', text: 'La adopción no empieza por la herramienta' },
       {
         type: 'paragraph',
