@@ -6,6 +6,7 @@ import McpFlow from './McpFlow'
 import SkillLoader from './SkillLoader'
 import TokenBudget from './TokenBudget'
 import ManagedSettings from './ManagedSettings'
+import AgenticWorkflow from './AgenticWorkflow'
 
 export const animations: Record<AnimationId, ComponentType> = {
   'copilot-experiences': CopilotExperiences,
@@ -14,4 +15,5 @@ export const animations: Record<AnimationId, ComponentType> = {
   'hooks-timeline': HooksTimeline,
   'token-budget': TokenBudget,
   'managed-settings': ManagedSettings,
+  'agentic-workflow': AgenticWorkflow,
 }
