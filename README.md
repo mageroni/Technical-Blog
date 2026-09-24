@@ -1,13 +1,14 @@
 # Technical Blog
 
 Aplicación web para un blog de tecnología sobre **DevOps**, **GitHub Copilot** e **IA**.
-Está construida con Vite, React y TypeScript, incluye seis artículos ya publicados y cada
+Está construida con Vite, React y TypeScript, incluye siete artículos ya publicados y cada
 uno de ellos lleva una **animación interactiva del concepto que explica**.
 
 ## Características
 
-- **6 artículos con contenido real** sobre experiencias de Copilot, distribución de Skills,
-  servidores MCP, hooks de observabilidad, coste por tokens y Enterprise Managed Settings.
+- **7 artículos con contenido real** sobre experiencias de Copilot, distribución de Skills,
+  servidores MCP, hooks de observabilidad, coste por tokens, Enterprise Managed Settings y
+  adopción AgentOps con ROI.
 - **Una animación por artículo**, construida con SVG y `framer-motion`, e interactiva:
   se puede pausar, avanzar paso a paso, encender y apagar servidores o mover un deslizador.
 - **Portada dinámica**: búsqueda instantánea (ignora acentos y mayúsculas), filtro por temas
@@ -61,9 +62,9 @@ la restauración del tema y su persistencia en `localStorage`.
 
 ```
 src/
-├── animations/   Una animación interactiva por concepto (órbita, pipeline, MCP, hooks, tokens, ajustes administrados)
+├── animations/   Una animación interactiva por concepto (órbita, pipeline, MCP, hooks, tokens, ajustes administrados y ROI)
 ├── components/   Cabecera, portada, tarjeta de artículo y vista de artículo
-├── data/         Contenido de los 6 artículos y su modelo de bloques
+├── data/         Contenido de los 7 artículos y su modelo de bloques
 ├── lib/          Búsqueda, tiempo de lectura, tema y enrutado por hash
 └── test/         Tests de contenido, utilidades e interacción
 ```

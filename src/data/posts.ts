@@ -5,6 +5,7 @@ export type AnimationId =
   | 'hooks-timeline'
   | 'token-budget'
   | 'managed-settings'
+  | 'agentops-roi'
 
 export type Block =
   | { type: 'paragraph'; text: string }
@@ -28,6 +29,123 @@ export type Post = {
 }
 
 export const posts: Post[] = [
+  {
+    slug: 'agentops-para-managers-adopcion-y-roi',
+    title: 'AgentOps para managers: adopción con impacto y ROI',
+    summary:
+      'Un marco práctico para convertir agentes de IA en capacidad de equipo medible: elegir casos de uso, gobernarlos y demostrar su retorno.',
+    author: 'Equipo Technical Blog',
+    date: '2026-09-24',
+    tags: ['AgentOps', 'Gobernanza', 'ROI', 'IA'],
+    accent: '#f59e0b',
+    animation: 'agentops-roi',
+    blocks: [
+      {
+        type: 'paragraph',
+        text: 'Un agente no genera valor por estar disponible: lo genera cuando ayuda a un equipo a completar una tarea importante con menos tiempo, menos retrabajo o mejor calidad. Para quien gestiona equipos, AgentOps es la disciplina que conecta esa promesa técnica con prioridades de negocio, controles operativos y evidencia de retorno.',
+      },
+      {
+        type: 'paragraph',
+        text: 'Este enfoque será presentado en Nerdearla Argentina 2026, en la charla “AgentOps 4 Managers: Adopción + ROI”.',
+      },
+      { type: 'heading', text: 'La adopción no empieza por la herramienta' },
+      {
+        type: 'paragraph',
+        text: 'El error habitual es distribuir una licencia, anunciar un piloto y esperar que aparezca la productividad. La adopción sostenible empieza con un problema concreto, una línea de base y una persona responsable del resultado. El agente es parte de la solución, no el objetivo del programa.',
+      },
+      {
+        type: 'list',
+        items: [
+          'Selecciona un flujo frecuente y delimitado: preparar una propuesta, clasificar incidencias, revisar cambios repetitivos o generar documentación inicial.',
+          'Define una métrica anterior al piloto: tiempo de ciclo, porcentaje de retrabajo, tasa de errores, volumen resuelto o satisfacción de quien usa el resultado.',
+          'Aclara el límite de autonomía: qué puede sugerir, qué puede ejecutar y en qué punto debe intervenir una persona.',
+          'Nombra a un responsable del proceso y a un grupo piloto representativo; no conviertas la primera prueba en una obligación para toda la organización.',
+        ],
+      },
+      {
+        type: 'quote',
+        text: 'Un piloto útil no prueba que el agente funciona: prueba que mejora un resultado que el negocio ya considera importante.',
+      },
+      { type: 'heading', text: 'Priorizar: impacto, viabilidad y riesgo' },
+      {
+        type: 'paragraph',
+        text: 'Un buen primer caso de uso combina volumen suficiente, pasos relativamente repetibles y una validación humana clara. No tiene que ser el proceso más vistoso. Los trabajos con información sensible, consecuencias irreversibles o criterios aún ambiguos pueden requerir más diseño de controles antes de convertirse en candidatos.',
+      },
+      {
+        type: 'list',
+        items: [
+          'Impacto: ¿cuánto tiempo, coste, calidad o experiencia de cliente puede mejorar si funciona?',
+          'Viabilidad: ¿el agente cuenta con instrucciones, contexto y herramientas aprobadas para completar el trabajo?',
+          'Riesgo: ¿qué ocurre si se equivoca, quién detecta el error y cómo se revierte la acción?',
+          'Aprendizaje: ¿el equipo podrá observar el resultado y ajustar el flujo en semanas, no en trimestres?',
+        ],
+      },
+      {
+        type: 'paragraph',
+        text: 'Conviene puntuar estas dimensiones de forma visible y comparar oportunidades. Así se evita que el roadmap quede dominado por la demo más atractiva o por el área que más ruido hace. El caso ganador es el que permite aprender con seguridad y trasladar ese aprendizaje a otros flujos.',
+      },
+      {
+        type: 'animation',
+        animation: 'agentops-roi',
+        caption:
+          'Explora cómo cambia el beneficio anual estimado al elegir un flujo y ajustar la adopción del equipo. Es un modelo de conversación, no una predicción financiera.',
+      },
+      { type: 'heading', text: 'Medir ROI sin inventar precisión' },
+      {
+        type: 'paragraph',
+        text: 'El ROI debe separar los beneficios observables de las hipótesis. Empieza por estimar el valor del tiempo liberado, la disminución de errores o el incremento de capacidad; después resta licencias, integración, gobierno, formación y supervisión. Si el tiempo ahorrado no se reasigna a una actividad valiosa, no debe contarse como ingreso realizado.',
+      },
+      {
+        type: 'code',
+        language: 'text',
+        code: `beneficio anual = (horas ahorradas + horas de retrabajo evitadas) × coste/hora
+                  + valor incremental verificable
+
+ROI = (beneficio anual - coste anual total) / coste anual total`,
+      },
+      {
+        type: 'paragraph',
+        text: 'Reporta también las métricas operativas que explican el número: adopción activa por equipo, tasa de aceptación de sugerencias, tiempo de ciclo, calidad a la primera y porcentaje de intervenciones humanas. Una reducción de lead time sin caída de calidad es más defendible que una cifra aislada de prompts o sesiones.',
+      },
+      { type: 'heading', text: 'Gobierno que habilita en lugar de frenar' },
+      {
+        type: 'paragraph',
+        text: 'El gobierno no es una revisión única antes de lanzar. Es un conjunto de decisiones repetibles: acceso a datos y herramientas, permisos mínimos, registro de acciones, evaluación de resultados, responsables de incidentes y criterios para pausar o retirar un agente. Cuanto más claro sea el límite, más fácil será que los equipos experimenten dentro de él.',
+      },
+      {
+        type: 'list',
+        items: [
+          'Protege los datos: clasifica qué información puede entrar en el flujo y qué conectores están aprobados.',
+          'Diseña revisiones proporcionales: una sugerencia de borrador no necesita el mismo control que una acción que modifica producción.',
+          'Registra las decisiones relevantes y revisa muestras de resultados para detectar degradación, sesgos o patrones de error.',
+          'Publica una vía de escalado: las personas deben poder reportar un resultado incorrecto, detener una automatización y saber quién responde.',
+        ],
+      },
+      { type: 'heading', text: 'Un roadmap de 90 días' },
+      {
+        type: 'list',
+        items: [
+          'Días 1–30: elige uno o dos casos, toma la línea de base, establece controles y forma al grupo piloto con ejemplos de trabajo real.',
+          'Días 31–60: ejecuta el piloto, revisa resultados semanalmente y ajusta instrucciones, contexto, permisos y puntos de revisión humana.',
+          'Días 61–90: compara contra la línea de base, documenta los aprendizajes y decide explícitamente si escalar, iterar o retirar cada caso.',
+        ],
+      },
+      {
+        type: 'paragraph',
+        text: 'Escalar no significa copiar una automatización a toda la empresa. Significa reutilizar el método: priorizar con criterios comunes, instrumentar resultados, aplicar controles adecuados y comunicar el impacto con el lenguaje de cada stakeholder. Así AgentOps deja de ser una serie de pruebas aisladas y pasa a ser una capacidad de gestión.',
+      },
+      { type: 'heading', text: 'Inspiración' },
+      {
+        type: 'paragraph',
+        text: 'Este artículo toma como punto de partida los temas de adopción, gobierno, métricas y retorno de la charla “AgentOps 4 Managers: Adopción + ROI” de Nerdearla Argentina, y desarrolla un marco propio para llevarlos a la práctica.',
+      },
+      {
+        type: 'link',
+        text: 'AgentOps 4 Managers: Adopción + ROI — Nerdearla Argentina',
+        href: 'https://nerdearla.com/argentina/schedule/agentops-4-managers-adopcion-roi/',
+      },
+    ],
+  },
   {
     slug: 'enterprise-managed-settings-gobernanza-de-copilot',
     title: 'Enterprise Managed Settings: gobernar Copilot más allá del proyecto',
