@@ -84,6 +84,10 @@ describe('App', () => {
     })
 
     expect(await screen.findByText('ROI: +180%')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Preparación de entregas' }))
+
+    expect(await screen.findByText('Coste anual: 5600 USD')).toBeInTheDocument()
+    expect(screen.getByText('ROI: +152%')).toBeInTheDocument()
     expect(
       screen.getByRole('link', { name: 'AgentOps 4 Managers: Adopción + ROI — Nerdearla Argentina' }),
     ).toHaveAttribute('href', 'https://nerdearla.com/argentina/schedule/agentops-4-managers-adopcion-roi/')

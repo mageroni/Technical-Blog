@@ -923,6 +923,12 @@ button {
   grid-template-columns: minmax(240px, 1fr) minmax(240px, 1.1fr);
 }
 
+@media (max-width: 760px) {
+  .anim--roi {
+    grid-template-columns: 1fr;
+  }
+}
+
 .roi-chart {
   display: grid;
   gap: 1rem;

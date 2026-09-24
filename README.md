@@ -64,7 +64,7 @@ la restauración del tema y su persistencia en `localStorage`.
 src/
 ├── animations/   Una animación interactiva por concepto (órbita, pipeline, MCP, hooks, tokens, ajustes administrados y ROI)
 ├── components/   Cabecera, portada, tarjeta de artículo y vista de artículo
-├── data/         Contenido de los 6 artículos y su modelo de bloques
+├── data/         Contenido de los 7 artículos y su modelo de bloques
 ├── lib/          Búsqueda, tiempo de lectura, tema y enrutado por hash
 └── test/         Tests de contenido, utilidades e interacción
 ```
