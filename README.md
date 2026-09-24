@@ -4,6 +4,8 @@ Aplicación web para un blog de tecnología sobre **DevOps**, **GitHub Copilot**
 Está construida con Vite, React y TypeScript, incluye seis artículos ya publicados y cada
 uno de ellos lleva una **animación interactiva del concepto que explica**.
 
+Actualizacion
+
 ## Características
 
 - **6 artículos con contenido real** sobre experiencias de Copilot, distribución de Skills,
