@@ -10,9 +10,9 @@ import {
 } from '../lib/posts'
 
 describe('contenido del blog', () => {
-  it('incluye seis artículos con slug único', () => {
-    expect(posts).toHaveLength(6)
-    expect(new Set(posts.map((post) => post.slug)).size).toBe(6)
+  it('incluye siete artículos con slug único', () => {
+    expect(posts).toHaveLength(7)
+    expect(new Set(posts.map((post) => post.slug)).size).toBe(7)
   })
 
   it('incluye ejemplos JSON válidos y la fuente oficial de managed settings', () => {

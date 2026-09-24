@@ -69,4 +69,23 @@ describe('App', () => {
     expect(screen.getByRole('link', { name: 'Guía inicial: Getting started with enterprise-managed settings' }))
       .toHaveAttribute('href', 'https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started')
   })
+
+  it('abre el artículo de AgentOps y recalcula el ROI al cambiar la adopción', async () => {
+    render(<App />)
+    fireEvent.click(screen.getByText('AgentOps para managers: adopción con impacto y ROI'))
+
+    expect(
+      await screen.findByRole('heading', { name: 'Medir ROI sin inventar precisión' }),
+    ).toBeInTheDocument()
+    expect(screen.getByText('ROI: +82%')).toBeInTheDocument()
+
+    fireEvent.change(screen.getByLabelText('Adopción efectiva del equipo'), {
+      target: { value: '100' },
+    })
+
+    expect(await screen.findByText('ROI: +180%')).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'AgentOps 4 Managers: Adopción + ROI — Nerdearla Argentina' }),
+    ).toHaveAttribute('href', 'https://nerdearla.com/argentina/schedule/agentops-4-managers-adopcion-roi/')
+  })
 })

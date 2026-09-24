@@ -918,6 +918,68 @@ button {
   accent-color: var(--accent);
 }
 
+/* AgentOps ROI */
+.anim--roi {
+  grid-template-columns: minmax(240px, 1fr) minmax(240px, 1.1fr);
+}
+
+.roi-chart {
+  display: grid;
+  gap: 1rem;
+  padding: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.roi-chart__header,
+.roi-chart__metrics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.roi-chart__header strong,
+.roi-chart__roi {
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.roi-chart__roi--positive {
+  color: #22c1a4;
+}
+
+.roi-chart__bar {
+  height: 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.roi-chart__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f59e0b, #22c1a4);
+}
+
+.roi-controls {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.roi-controls legend {
+  padding: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
 .slider__hint {
   font-size: 0.75rem;
 }
